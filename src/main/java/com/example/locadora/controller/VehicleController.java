@@ -74,7 +74,7 @@ public class VehicleController {
     }
 
     @GetMapping("/plate/{plate}")
-    public ResponseEntity<VehicleDto> getById(@PathVariable String plate){
+    public ResponseEntity<VehicleDto> getByPlate(@PathVariable String plate){
         VehicleModel vehicleModel = vehicleRepository.findByPlate(plate)
                 .orElse(null);
 
