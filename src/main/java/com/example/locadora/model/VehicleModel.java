@@ -45,4 +45,8 @@ public class VehicleModel {
     public Double getDailyRate() {
         return dailyRate;
     }
+
+    public void setId(UUID vehicleId) {
+        this.id = vehicleId;
+    }
 }

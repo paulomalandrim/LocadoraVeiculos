@@ -38,4 +38,8 @@ public class CustomerModel {
     public UUID getId() {
         return id;
     }
+
+    public void setId(UUID customerId) {
+        this.id = customerId;
+    }
 }

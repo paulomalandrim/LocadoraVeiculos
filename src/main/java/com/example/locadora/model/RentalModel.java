@@ -63,4 +63,28 @@ public class RentalModel {
     public Double getTotal() {
         return total;
     }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setCustomerId(UUID customerId) {
+        this.customer.setId(customerId);
+    }
+
+    public void setVehicleId(UUID vehicleId) {
+        this.vehicle.setId(vehicleId);
+    }
+
+    public void setInitialDate(LocalDate initialDate) {
+        this.initialDate = initialDate;
+    }
+
+    public void setFinalDate(LocalDate finalDate) {
+        this.finalDate = finalDate;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
 }
