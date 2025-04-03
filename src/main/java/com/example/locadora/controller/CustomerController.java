@@ -71,4 +71,37 @@ public class CustomerController {
                 .status(HttpStatus.OK)
                 .body(customerDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id){
+        if (! customerRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        customerRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CustomerDto> changeById(@PathVariable UUID id, CustomerDto customerDto){
+
+        if (id != customerDto.getId()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (!customerRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+
+        CustomerModel customerToUpdate = customerDto.toEntity();
+        CustomerModel customerUpdated = customerRepository.save(customerToUpdate);
+        CustomerDto customerToReturn = new CustomerDto(
+                customerUpdated.getId(),
+                customerUpdated.getName(),
+                customerUpdated.getCpf()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(customerToReturn);
+    }
 }

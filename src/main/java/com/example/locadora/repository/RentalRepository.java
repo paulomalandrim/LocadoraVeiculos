@@ -11,8 +11,7 @@ import java.util.UUID;
 
 
 public interface RentalRepository extends JpaRepository<RentalModel, UUID> {
-
-    Optional<List<RentalModel>> findAllByCustomer(CustomerModel customer);
-    Optional<List<RentalModel>> findAllByVehicle(VehicleModel vehicle);
+    List<RentalModel> findByCustomer_Id(UUID customerId);
+    List<RentalModel> findByVehicle_Id(UUID vehicleId);
 
 }

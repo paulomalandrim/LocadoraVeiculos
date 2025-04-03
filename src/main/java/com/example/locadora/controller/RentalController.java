@@ -107,17 +107,10 @@ public class RentalController {
                 .body(rentalDto);
     }
 
-    @GetMapping("/customer/{id}")
+    @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<RentalDto>> getAllByCustomer(@PathVariable UUID customerId){
-        CustomerModel customerModel = customerRepository.findById(customerId)
-                .orElse(null);
 
-        if (customerModel == null){
-            return ResponseEntity.noContent().build();
-        }
-
-        List<RentalModel> rentalModelList = rentalRepository.findAllByCustomer(customerModel)
-                .orElse(null);
+        List<RentalModel> rentalModelList = rentalRepository.findByCustomer_Id(customerId);
 
         if (rentalModelList == null || rentalModelList.isEmpty()){
             return ResponseEntity.noContent().build();
@@ -139,17 +132,9 @@ public class RentalController {
                 .body(rentalDtoList);
     }
 
-    @GetMapping("/vehicle/{id}")
+    @GetMapping("/vehicle/{vehicleId}")
     public ResponseEntity<List<RentalDto>> getAllByVehicle(@PathVariable UUID vehicleId){
-        VehicleModel vehicleModel = vehicleRepository.findById(vehicleId)
-                .orElse(null);
-
-        if (vehicleModel == null){
-            return ResponseEntity.noContent().build();
-        }
-
-        List<RentalModel> rentalModelList = rentalRepository.findAllByVehicle(vehicleModel)
-                .orElse(null);
+        List<RentalModel> rentalModelList = rentalRepository.findByVehicle_Id(vehicleId);
 
         if (rentalModelList == null || rentalModelList.isEmpty()){
             return ResponseEntity.noContent().build();
@@ -171,5 +156,13 @@ public class RentalController {
                 .body(rentalDtoList);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id){
+        if (!rentalRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        rentalRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }

@@ -92,4 +92,37 @@ public class VehicleController {
                 .status(HttpStatus.OK)
                 .body(vehicleDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id){
+        if (!vehicleRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        vehicleRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<VehicleDto> changeById(@PathVariable UUID id, VehicleDto vehicleDto){
+
+        if (id != vehicleDto.getId()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (!vehicleRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+
+        VehicleModel vehicleToUpdate = vehicleDto.toEntity();
+        VehicleModel vehicleUpdated = vehicleRepository.save(vehicleToUpdate);
+        VehicleDto customerToReturn = new CustomerDto(
+                vehicleUpdated.getId(),
+                vehicleUpdated.getName(),
+                vehicleUpdated.getCpf()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(customerToReturn);
+    }
 }
