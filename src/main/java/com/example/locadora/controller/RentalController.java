@@ -165,4 +165,46 @@ public class RentalController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<RentalDto> changeById(@PathVariable UUID id,
+                                                @RequestBody RentalDto rentalDto){
+
+        if (id != rentalDto.getId()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (!rentalRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+
+        VehicleModel vehicleModel = vehicleRepository.findById(rentalDto.getVehicleId())
+                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
+        CustomerModel customerModel = customerRepository.findById(rentalDto.getCustomerId())
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        RentalModel rentalToUpdate = new RentalModel(
+                rentalDto.getId(),
+                customerModel,
+                vehicleModel,
+                rentalDto.getInitialDate(),
+                rentalDto.getFinalDate(),
+                rentalDto.getTotal()
+        );
+
+
+        RentalModel rentalUpdated = rentalRepository.save(rentalToUpdate);
+        RentalDto rentalToReturn = new RentalDto(
+                rentalUpdated.getId(),
+                rentalUpdated.getCustomer().getId(),
+                rentalUpdated.getVehicle().getId(),
+                rentalUpdated.getInitialDate(),
+                rentalUpdated.getFinalDate(),
+                rentalUpdated.getTotal()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(rentalToReturn);
+    }
+
 }

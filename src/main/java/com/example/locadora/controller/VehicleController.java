@@ -103,7 +103,8 @@ public class VehicleController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<VehicleDto> changeById(@PathVariable UUID id, VehicleDto vehicleDto){
+    public ResponseEntity<VehicleDto> changeById(@PathVariable UUID id,
+                                                 @RequestBody VehicleDto vehicleDto){
 
         if (id != vehicleDto.getId()){
             return ResponseEntity.badRequest().build();
@@ -115,14 +116,15 @@ public class VehicleController {
 
         VehicleModel vehicleToUpdate = vehicleDto.toEntity();
         VehicleModel vehicleUpdated = vehicleRepository.save(vehicleToUpdate);
-        VehicleDto customerToReturn = new CustomerDto(
+        VehicleDto vehicleToReturn = new VehicleDto(
                 vehicleUpdated.getId(),
-                vehicleUpdated.getName(),
-                vehicleUpdated.getCpf()
+                vehicleUpdated.getModel(),
+                vehicleUpdated.getPlate(),
+                vehicleUpdated.getDailyRate()
         );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(customerToReturn);
+                .body(vehicleToReturn);
     }
 }

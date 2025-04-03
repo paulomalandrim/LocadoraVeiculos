@@ -82,7 +82,8 @@ public class CustomerController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CustomerDto> changeById(@PathVariable UUID id, CustomerDto customerDto){
+    public ResponseEntity<CustomerDto> changeById(@PathVariable UUID id,
+                                                  @RequestBody CustomerDto customerDto){
 
         if (id != customerDto.getId()){
             return ResponseEntity.badRequest().build();
