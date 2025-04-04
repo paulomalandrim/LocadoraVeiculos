@@ -93,6 +93,7 @@ public class CustomerController {
             return ResponseEntity.notFound().build();
         }
 
+
         CustomerModel customerToUpdate = customerDto.toEntity();
         CustomerModel customerUpdated = customerRepository.save(customerToUpdate);
         CustomerDto customerToReturn = new CustomerDto(
