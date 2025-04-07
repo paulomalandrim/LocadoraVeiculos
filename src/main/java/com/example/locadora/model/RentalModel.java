@@ -68,12 +68,12 @@ public class RentalModel {
         this.id = id;
     }
 
-    public void setCustomerId(UUID customerId) {
-        this.customer.setId(customerId);
+    public void setCustomer(CustomerModel customer) {
+        this.customer = customer;
     }
 
-    public void setVehicleId(UUID vehicleId) {
-        this.vehicle.setId(vehicleId);
+    public void setVehicle(VehicleModel vehicle) {
+        this.vehicle = vehicle;
     }
 
     public void setInitialDate(LocalDate initialDate) {

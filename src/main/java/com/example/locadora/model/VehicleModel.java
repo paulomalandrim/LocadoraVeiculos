@@ -49,4 +49,16 @@ public class VehicleModel {
     public void setId(UUID vehicleId) {
         this.id = vehicleId;
     }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setPlate(String plate) {
+        this.plate = plate;
+    }
+
+    public void setDailyRate(Double dailyRate) {
+        this.dailyRate = dailyRate;
+    }
 }

@@ -167,30 +167,42 @@ public class RentalController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<RentalDto> changeById(@PathVariable UUID id,
-                                                @RequestBody RentalDto rentalDto){
+                                                 @RequestBody RentalDto rentalDto){
 
-        if (id != rentalDto.getId()){
+        if (!id.equals(rentalDto.getId())){
             return ResponseEntity.badRequest().build();
         }
 
-        if (!rentalRepository.existsById(id)){
+        RentalModel rentalToUpdate = rentalRepository.findById(id).orElse(null);
+
+        if (rentalToUpdate == null){
             return ResponseEntity.notFound().build();
         }
 
-        VehicleModel vehicleModel = vehicleRepository.findById(rentalDto.getVehicleId())
-                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
-        CustomerModel customerModel = customerRepository.findById(rentalDto.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        CustomerModel newCustomer = null;
+        try{
+            newCustomer = customerRepository
+                    .findById(rentalDto.getCustomerId())
+                    .orElseThrow( ()-> new RuntimeException("Customer not found."));
+        } catch (RuntimeException ex){
+            return ResponseEntity.badRequest().build();
+        }
 
-        RentalModel rentalToUpdate = new RentalModel(
-                rentalDto.getId(),
-                customerModel,
-                vehicleModel,
-                rentalDto.getInitialDate(),
-                rentalDto.getFinalDate(),
-                rentalDto.getTotal()
-        );
+        VehicleModel newVehicle = null;
+        try {
+            newVehicle = vehicleRepository
+                    .findById(rentalDto.getVehicleId())
+                    .orElseThrow(()-> new RuntimeException("Vehicle not found."));
 
+        } catch (RuntimeException ex){
+            return ResponseEntity.badRequest().build();
+        }
+
+        rentalToUpdate.setCustomer(newCustomer);
+        rentalToUpdate.setVehicle(newVehicle);
+        rentalToUpdate.setInitialDate(rentalDto.getInitialDate());
+        rentalToUpdate.setFinalDate(rentalDto.getFinalDate());
+        rentalToUpdate.setTotal(rentalDto.getTotal());
 
         RentalModel rentalUpdated = rentalRepository.save(rentalToUpdate);
         RentalDto rentalToReturn = new RentalDto(

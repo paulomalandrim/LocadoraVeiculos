@@ -85,16 +85,19 @@ public class CustomerController {
     public ResponseEntity<CustomerDto> changeById(@PathVariable UUID id,
                                                   @RequestBody CustomerDto customerDto){
 
-        if (id != customerDto.getId()){
+        if (!id.equals(customerDto.getId())){
             return ResponseEntity.badRequest().build();
         }
 
-        if (!customerRepository.existsById(id)){
+        CustomerModel customerToUpdate = customerRepository.findById(id).orElse(null);
+
+        if (customerToUpdate == null){
             return ResponseEntity.notFound().build();
         }
 
+        customerToUpdate.setName(customerDto.getName());
+        customerToUpdate.setCpf(customerDto.getCpf());
 
-        CustomerModel customerToUpdate = customerDto.toEntity();
         CustomerModel customerUpdated = customerRepository.save(customerToUpdate);
         CustomerDto customerToReturn = new CustomerDto(
                 customerUpdated.getId(),

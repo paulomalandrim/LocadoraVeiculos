@@ -106,15 +106,20 @@ public class VehicleController {
     public ResponseEntity<VehicleDto> changeById(@PathVariable UUID id,
                                                  @RequestBody VehicleDto vehicleDto){
 
-        if (id != vehicleDto.getId()){
+        if (!id.equals(vehicleDto.getId())){
             return ResponseEntity.badRequest().build();
         }
 
-        if (!vehicleRepository.existsById(id)){
+        VehicleModel vehicleToUpdate = vehicleRepository.findById(id).orElse(null);
+
+        if (vehicleToUpdate == null){
             return ResponseEntity.notFound().build();
         }
 
-        VehicleModel vehicleToUpdate = vehicleDto.toEntity();
+        vehicleToUpdate.setModel(vehicleDto.getModel());
+        vehicleToUpdate.setPlate(vehicleDto.getPlate());
+        vehicleToUpdate.setDailyRate(vehicleDto.getDailyRate());
+
         VehicleModel vehicleUpdated = vehicleRepository.save(vehicleToUpdate);
         VehicleDto vehicleToReturn = new VehicleDto(
                 vehicleUpdated.getId(),

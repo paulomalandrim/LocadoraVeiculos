@@ -42,4 +42,12 @@ public class CustomerModel {
     public void setId(UUID customerId) {
         this.id = customerId;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
 }
